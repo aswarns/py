@@ -1,0 +1,26 @@
+---
+- name: install & config apache & pre-requsite
+  hosts: groupB
+  remote_user: aswarns
+  become: yes
+
+  tasks:
+  - name: install epel repo
+    yum: name=epel-release state=present
+
+  - name: install python bindings for SElinux
+    yum: name={{item}} state=present
+    with_items:
+    - libselinux-python
+    - libsemanage-python
+
+  - name: test to see if Selinux is running
+    command: getenforce
+    register: sestatus
+    changed_when: false
+
+  - name: install apache
+    yum: name=httpd state=present
+
+  - name: start apache
+    service: name=httpd state=started enabled=yes

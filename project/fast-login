@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+#this script is made to autologin in remote server\
+#using ssh & sshpass to use password\
+#(THIS IS MADE TO REOMOVE DEPENDENCY TO AGAIN & AGAIN TYPE YOUR PASSWORD),\
+#once password is used, it will be remove password file localy as well.
+
+#Auther: ashish.swarn.singh@oracle.com
+#Date 08/10/2017 13:00
+
+# ###  You need to copy this script to /usr/bin/; chmod 777 /usr/bin/fast-login
+# ###  ~]$ fast-login host1
+
+
+echo "rooter" > ~/.ssh/.SSHPASS # Enter your password here
+
+if [ $# -eq 1 ]
+	then
+		nc -vw3  $1 22 </dev/null  &>/dev/null
+    		if [ $? = 0 ]
+    		then 
+      			sshpass -f ~/.ssh/.SSHPASS ssh -oStrictHostKeyChecking=no aswarns@$1  # enter here your UID
+      			rm -r ~/.ssh/.SSHPASS
+    		else
+			echo;echo;echo
+      			echo " your hostname is not correct or Port 22 is not opened "
+			echo;echo;echo
+      			exit 1
+    		fi
+	else
+		echo;echo;echo 
+		echo "Enter valid & single hostname "
+		echo "(it does not support multiple host login at once )i.e. $0 $HOSTNAME  "
+		echo;echo;echo 
+		exit 1
+fi

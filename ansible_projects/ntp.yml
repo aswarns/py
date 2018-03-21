@@ -1,0 +1,23 @@
+---
+- hosts: groupB
+  remote_user: aswarns
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: no
+
+  vars:
+    ntpserver: 0.rhel.pool.ntp.org
+
+  tasks:
+  - name: install NTP latest & set NTP server
+    yum:
+      name: ntpd
+      state: latest
+    notify:
+    - startservice
+  handlers:
+    - name: ntpd
+      service: 
+        name: ntpd
+        state: restarted

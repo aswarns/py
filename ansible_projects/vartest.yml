@@ -1,0 +1,16 @@
+---
+- hosts: '{{ myhosts }}'
+  remote_user: aswarns
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: "{{ gather }}"
+  vars:
+    myhosts: groupB
+    gather: yes
+    pkg: telnet, rsync, nc, links
+  tasks:
+  - name: Install yhe indicated s/w
+    yum:
+      name: "{{ pkg }}"
+      state: latest

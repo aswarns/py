@@ -1,0 +1,21 @@
+--- # Notification and handlers
+- hosts: groupB
+  remote_user: aswarns
+  become: yes
+  become_method: sudo
+  gather_facts:
+  connection: ssh
+  tasks:
+  - name: Install httpd & starts
+    yum:
+      name: httpd
+      state: latest
+
+    notify:
+    - enable & start httpd service
+  handlers:
+  - name: enable & start httpd service
+    service:
+      name: httpd
+      enabled: yes
+      state: restarted

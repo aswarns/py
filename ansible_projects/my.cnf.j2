@@ -1,0 +1,10 @@
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.lock
+user=mysql
+symbolic-links=0
+port={{ mysql-port }}
+
+[mysql-safe]
+log-error=/var/log/mysqld.log
+pid=/var/run/mariadb/mysqld.pid

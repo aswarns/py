@@ -1,0 +1,26 @@
+---
+- name: install and configure mariadb
+  hosts: groupA
+  
+  vars:
+    mysql_port: 3306
+
+
+  tasks:
+  - name: install mariadb
+    yum: name=mariadb-server state=latest
+
+  - name: create mariadb configuration file
+    template: 
+      command: src=my.cnf.j2 dest= /etc/my.cnf
+    notify: restart mariadb
+ 
+  - name: create mariadb log file
+    file: path:=/var/log/mysqld.log state=touch owner=mysql group=mysql mode=0775
+
+  - name: start the mariadb service
+    service: name=mariadb state=started enabled=yes
+
+  handlers:
+  - name: restart mariadb
+    service: name=mariadb state=restarted

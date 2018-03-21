@@ -1,0 +1,31 @@
+#!/usr/bin/expect 
+
+# commented lines represent different things to try
+set host [lindex $argv 0]
+set PASSWORD "rooter"
+
+set timeout -1
+#set send_slow {1 .1}
+
+spawn /usr/bin/ssh -o StrictHostKeyChecking=no $host
+sleep .1
+expect "assword:*"
+send "$PASSWORD\r"
+
+expect  {
+    "\$ " {
+        send "export PATH=\$PATH:/usr/local/git/bin:/usr/local/pdit/bin:/usr/local/bin;pbrun pb-admin -u root\r"
+   } "\> " {
+        send "export PATH=\$PATH:/usr/local/git/bin:/usr/local/pdit/bin:/usr/local/bin;pbrun pb-admin -u root\r"
+   }
+}
+#send "pbrun ohscrm-root -u root\r"
+expect "*Password:*"
+sleep .1
+#sleep 5
+#send "\r"
+#sleep .1
+send "$PASSWORD\r"
+#send -s -- "$PASSWORD\r"
+expect "\# "
+interact
